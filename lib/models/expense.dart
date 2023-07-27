@@ -7,12 +7,12 @@ final formatter =
 
 const uuid = Uuid();
 
-enum Category { food, trabel, leisure, work }
+enum Category { food, travel, leisure, work }
 
 const categoryIcons = {
   Category.food: Icons.lunch_dining,
   Category.leisure: Icons.movie,
-  Category.trabel: Icons.flight_takeoff,
+  Category.travel: Icons.flight_takeoff,
   Category.work: Icons.work,
 };
 
@@ -33,5 +33,32 @@ class Expense {
 
   String get formattedDate {
     return formatter.format(date);
+  }
+}
+
+class ExpenseBucket {
+  const ExpenseBucket({
+    required this.category,
+    required this.expenses,
+  });
+
+  ExpenseBucket.forCategory(List<Expense> allExpenses, this.category)
+      : expenses = allExpenses //부가적인 생성자 함수 만드는 방법임
+            .where((expense) =>
+                expense.category ==
+                category) //category 같은 애들로만 분류해주는거임 where을 통해서
+            .toList();
+
+  final Category category;
+  final List<Expense> expenses;
+
+  double get totalExpenses {
+    double sum = 0;
+
+    for (final expense in expenses) {
+      sum += expense.amount;
+    }
+
+    return sum;
   }
 }
